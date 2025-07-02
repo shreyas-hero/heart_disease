@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Heart Disease Prediction - Advanced Medical Analysis</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Left Panel - Animation and Visual */
+        .left-panel {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(45deg, #dc2626, #ef4444, #f87171);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .medical-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20,20 L30,10 L40,20 L50,10 L60,20 L70,10 L80,20" stroke="white" stroke-width="2" fill="none"/><path d="M20,40 L25,30 L35,50 L45,20 L55,60 L65,25 L75,45 L80,40" stroke="white" stroke-width="2" fill="none"/></svg>') repeat;
+            animation: pulse-bg 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-bg {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.2; }
+        }
+        
+        .heart-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .main-heart {
+            font-size: 120px;
+            color: #ffffff;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+            margin-bottom: 20px;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+            }
+            25% { 
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
+            }
+            50% { 
+                transform: scale(1.2);
+                filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.7));
+            }
+            75% { 
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
+            }
+        }
+        
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 24px;
+            animation: float-up 8s linear infinite;
+        }
+        
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .floating-heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .floating-heart:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .floating-heart:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .floating-heart:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .floating-heart:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .floating-heart:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .floating-heart:nth-child(7) { left: 70%; animation-delay: 6s; }
+        .floating-heart:nth-child(8) { left: 80%; animation-delay: 7s; }
+        
+        .title-section {
+            text-align: center;
+            color: white;
+            z-index: 3;
+        }
+        
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .medical-icons {
+            position: absolute;
+            bottom: 30px;
+            display: flex;
+            gap: 20px;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .medical-icon {
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        .medical-icon:nth-child(2) { animation-delay: 0.2s; }
+        .medical-icon:nth-child(3) { animation-delay: 0.4s; }
+        .medical-icon:nth-child(4) { animation-delay: 0.6s; }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Right Panel - Form */
+        .right-panel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .form-subtitle {
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        input[type="text"] {
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            background: white;
+        }
+        
+        input[type="text"]:hover {
+            border-color: #d1d5db;
+            background: white;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #b91c1c, #dc2626);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .pulse-line {
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: 100px;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 400"><path d="M50,200 L55,180 L60,220 L65,160 L70,240 L75,140 L80,260 L85,200" stroke="%23ef4444" stroke-width="3" fill="none" opacity="0.3"/></svg>') repeat-y;
+            animation: pulse-line 2s linear infinite;
+        }
+        
+        @keyframes pulse-line {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
+        }
+        
+        footer {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                min-height: 40vh;
+            }
+            
+            .main-heart {
+                font-size: 80px;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-panel {
+                padding: 20px;
+            }
+        }
+        
+        /* Additional Medical Animations */
+        .ecg-line {
+            position: absolute;
+            bottom: 20%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+        
+        .ecg-pulse {
+            position: absolute;
+            top: -10px;
+            left: -100px;
+            width: 100px;
+            height: 20px;
+            background: linear-gradient(90deg, transparent, #ffffff, transparent);
+            animation: ecg-move 3s linear infinite;
+        }
+        
+        @keyframes ecg-move {
+            0% { left: -100px; }
+            100% { left: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Left Panel - Animation and Visual -->
+        <div class="left-panel">
+            <div class="medical-background"></div>
+            
+            <div class="floating-hearts">
+                <div class="floating-heart">💓</div>
+                <div class="floating-heart">💗</div>
+                <div class="floating-heart">💖</div>
+                <div class="floating-heart">💝</div>
+                <div class="floating-heart">💘</div>
+                <div class="floating-heart">💞</div>
+                <div class="floating-heart">💕</div>
+                <div class="floating-heart">❤️</div>
+            </div>
+            
+            <div class="heart-container">
+                <div class="main-heart">❤️</div>
+            </div>
+            
+            <div class="title-section">
+                <h1 class="main-title">CardioPredict AI</h1>
+                <p class="subtitle">Advanced Heart Disease Risk Assessment</p>
+            </div>
+            
+            <div class="ecg-line">
+                <div class="ecg-pulse"></div>
+            </div>
+            
+            <div class="medical-icons">
+                <span class="medical-icon">🩺</span>
+                <span class="medical-icon">💊</span>
+                <span class="medical-icon">🏥</span>
+                <span class="medical-icon">📊</span>
+            </div>
+        </div>
+        
+        <!-- Right Panel - Form -->
+        <div class="right-panel">
+            <div class="pulse-line"></div>
+            
+            <div class="form-container">
+                <h2 class="form-title">Health Assessment Form</h2>
+                <p class="form-subtitle">Please provide accurate information for better prediction results</p>
+                
+                <form action="/predict" method="post">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="age">Age (years)</label>
+                            <input type="text" id="age" name="feature0" placeholder="e.g., 45" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sex">Sex (1=Male, 0=Female)</label>
+                            <input type="text" id="sex" name="feature1" placeholder="0 or 1" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cp">Chest Pain Type (0-3)</label>
+                            <input type="text" id="cp" name="feature2" placeholder="0, 1, 2, or 3" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trestbps">Resting Blood Pressure (mmHg)</label>
+                            <input type="text" id="trestbps" name="feature3" placeholder="e.g., 120" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="chol">Cholesterol Level (mg/dl)</label>
+                            <input type="text" id="chol" name="feature4" placeholder="e.g., 200" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fbs">Fasting Blood Sugar > 120 mg/dl</label>
+                            <input type="text" id="fbs" name="feature5" placeholder="1=Yes, 0=No" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="restecg">Resting ECG Results (0-2)</label>
+                            <input type="text" id="restecg" name="feature6" placeholder="0, 1, or 2" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="thalach">Max Heart Rate Achieved</label>
+                            <input type="text" id="thalach" name="feature7" placeholder="e.g., 150" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exang">Exercise Induced Angina</label>
+                            <input type="text" id="exang" name="feature8" placeholder="1=Yes, 0=No" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="oldpeak">ST Depression (Exercise)</label>
+                            <input type="text" id="oldpeak" name="feature9" placeholder="e.g., 1.5" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="slope">Peak Exercise ST Slope (0-2)</label>
+                            <input type="text" id="slope" name="feature10" placeholder="0, 1, or 2" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ca">Major Vessels Colored (0-3)</label>
+                            <input type="text" id="ca" name="feature11" placeholder="0, 1, 2, or 3" required />
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="thal">Thalassemia Type</label>
+                            <input type="text" id="thal" name="feature12" placeholder="1=Normal, 2=Fixed, 3=Reversible" required />
+                        </div>
+                    </div>
+                    
+                    <input type="submit" value="🔍 Analyze Heart Health" class="submit-btn" />
+                </form>
+            </div>
+            
+            <footer>© 2025 Ananya_BT - CardioPredict AI</footer>
+        </div>
+    </div>
+</body>
+</html>

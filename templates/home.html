@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Charset & Viewport -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Title & Description -->
+  <title>CardioPredict AI – Heart Disease Risk Analysis</title>
+  <meta name="description" content="Use AI-powered analysis to assess your heart disease risk instantly and securely. Trusted by thousands.">
+
+  <!-- Keywords (optional but helpful for SEO) -->
+  <meta name="keywords" content="CardioPredict, heart disease, AI health assessment, medical diagnosis, health risk prediction, machine learning health">
+
+  <!-- Author -->
+  <meta name="author" content="CardioPredict Team">
+
+  <!-- Theme Color (Mobile browser color) -->
+  <meta name="theme-color" content="#ff4757">
+
+  <!-- Open Graph for social media sharing -->
+  <meta property="og:title" content="CardioPredict AI – Heart Disease Risk Analysis">
+  <meta property="og:description" content="Instant AI-powered assessment of your heart disease risk. Secure, fast, and accurate.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://127.0.0.1:5000/"> <!-- Update this when hosted -->
+  <meta property="og:image" content="/static/images/cardio-banner.png"> <!-- Replace with your own image -->
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CardioPredict AI – Heart Disease Risk Analysis">
+  <meta name="twitter:description" content="Instant, AI-powered, and privacy-focused heart disease prediction tool.">
+  <meta name="twitter:image" content="/static/images/cardio-banner.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated Background Elements */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-medical {
+            position: absolute;
+            color: rgba(239, 68, 68, 0.1);
+            font-size: 48px;
+            animation: float-diagonal 20s linear infinite;
+        }
+        
+        @keyframes float-diagonal {
+            0% {
+                transform: translate(-100px, 100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(100vw, -100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .floating-medical:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .floating-medical:nth-child(2) { left: 20%; animation-delay: 3s; }
+        .floating-medical:nth-child(3) { left: 30%; animation-delay: 6s; }
+        .floating-medical:nth-child(4) { left: 40%; animation-delay: 9s; }
+        .floating-medical:nth-child(5) { left: 50%; animation-delay: 12s; }
+        .floating-medical:nth-child(6) { left: 60%; animation-delay: 15s; }
+        
+        .pulse-circles {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 2px solid rgba(239, 68, 68, 0.2);
+            border-radius: 50%;
+            animation: pulse-expand 4s ease-in-out infinite;
+        }
+        
+        .pulse-circles:nth-child(7) {
+            top: 10%;
+            left: 80%;
+            animation-delay: 0s;
+        }
+        
+        .pulse-circles:nth-child(8) {
+            bottom: 20%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+        
+        @keyframes pulse-expand {
+            0%, 100% {
+                transform: scale(0.5);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.2;
+            }
+        }
+        
+        /* Main Content Container */
+        .main-container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 60px 50px;
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Header Section */
+        .header-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: heartbeat-main 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.3));
+        }
+        
+        @keyframes heartbeat-main {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            75% {
+                transform: scale(1.1);
+            }
+        }
+        
+        .main-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+        
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: rgba(239, 68, 68, 0.05);
+            border: 2px solid rgba(239, 68, 68, 0.1);
+            border-radius: 20px;
+            padding: 25px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .feature-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            margin-top: 40px;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            background: linear-gradient(135deg, #b91c1c, #dc2626);
+            box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+            transform: translateY(-3px);
+        }
+        
+        .button-icon {
+            font-size: 20px;
+            animation: pulse-icon 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ef4444;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+        
+        /* ECG Line Animation */
+        .ecg-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(239, 68, 68, 0.2);
+            overflow: hidden;
+        }
+        
+        .ecg-pulse {
+            position: absolute;
+            top: -15px;
+            left: -150px;
+            width: 150px;
+            height: 30px;
+            background: linear-gradient(90deg, transparent, #ef4444, transparent);
+            animation: ecg-move 4s linear infinite;
+        }
+        
+        @keyframes ecg-move {
+            0% { left: -150px; }
+            100% { left: 100%; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+            
+            .main-title {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .header-icon {
+                font-size: 60px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 30px 20px;
+            }
+            
+            .main-title {
+                font-size: 1.8rem;
+            }
+            
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-animation">
+        <div class="floating-medical">🩺</div>
+        <div class="floating-medical">💊</div>
+        <div class="floating-medical">🏥</div>
+        <div class="floating-medical">📊</div>
+        <div class="floating-medical">❤️</div>
+        <div class="floating-medical">🫀</div>
+        <div class="pulse-circles"></div>
+        <div class="pulse-circles"></div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="content-wrapper">
+            <div class="ecg-line">
+                <div class="ecg-pulse"></div>
+            </div>
+            
+            <!-- Header -->
+            <div class="header-icon">❤️</div>
+            <h1 class="main-title">CardioPredict AI</h1>
+            <p class="subtitle">Advanced Heart Disease Risk Assessment Platform</p>
+            
+            <!-- Features Grid -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🤖</span>
+                    <div class="feature-title">AI-Powered Analysis</div>
+                    <div class="feature-desc">Machine learning algorithms trained on medical data</div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <div class="feature-title">Instant Results</div>
+                    <div class="feature-desc">Get predictions in seconds with detailed insights</div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <div class="feature-title">Secure & Private</div>
+                    <div class="feature-desc">Your health data is protected and confidential</div>
+                </div>
+            </div>
+            
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <p class="description">
+                    Enter your health parameters and let our advanced AI analyze your heart disease risk. 
+                    Our system evaluates multiple factors to provide you with accurate predictions.
+                </p>
+                
+                <a href="http:localhost:5000/input" class="cta-button">
+    <span class="button-icon">🔍</span>
+    Start Health Assessment
+</a>
+            </div>
+            
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stat-item">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Accuracy Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Assessments</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Available</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
